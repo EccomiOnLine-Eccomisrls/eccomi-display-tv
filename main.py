@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse
 app = FastAPI(title="Eccomi Display TV")
 
 ORIZZONTALE = "https://1drv.ms/v/c/ed36ce1208493750/IQD3uR3DU9Y9QJsyJ9BDjyQwAe0VDOQjjXGrJyfGPPm7Mak?e=ruE47B"
-VERTICALE = "https://1drv.ms/v/c/ed36ce1208493750/IQCJNe3IOUmiQJKPvq7gR1SGAT6K0gg5U6bZ6HqeUQrBPN0?e=t309QG"
+VERTICALE = "https://drive.google.com/uc?export=download&id=1rEeVmQ1-q4TXTVVP-6opjmAA4nFquqcV"
 
 SCREENS = {
     "maximo": {
