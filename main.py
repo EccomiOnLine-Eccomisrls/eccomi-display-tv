@@ -7,59 +7,95 @@ app = FastAPI(title="Eccomi Display TV")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 SCREENS = {
-    "maximo": "/static/videos/orizzontale.mp4",
-    "civitavecchia": "/static/videos/verticale.mp4",
-    "grosseto": "/static/videos/orizzontale.mp4",
-    "laquila": "/static/videos/orizzontale.mp4",
+    "maximo": {
+        "title": "Maximo TV",
+        "video": "/static/videos/orizzontale.MP4",
+    },
+    "civitavecchia": {
+        "title": "Civitavecchia TV",
+        "video": "/static/videos/verticale.MP4",
+    },
+    "grosseto": {
+        "title": "Grosseto TV",
+        "video": "/static/videos/orizzontale.MP4",
+    },
+    "laquila": {
+        "title": "L'Aquila TV",
+        "video": "/static/videos/orizzontale.MP4",
+    },
 }
 
-def page(video_url):
+
+def render_page(title: str, video_url: str):
     return f"""
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="600">
+  <title>{title}</title>
+
   <style>
     html, body {{
       margin: 0;
-      background: #000;
-      overflow: hidden;
+      padding: 0;
       width: 100%;
       height: 100%;
+      background: #000;
+      overflow: hidden;
     }}
+
     video {{
       width: 100vw;
       height: 100vh;
       object-fit: cover;
+      background: #000;
     }}
   </style>
 </head>
+
 <body>
-  <video autoplay muted loop playsinline>
+  <video autoplay muted loop playsinline preload="auto">
     <source src="{video_url}?v=1" type="video/mp4">
   </video>
 </body>
 </html>
 """
 
+
 @app.get("/", response_class=HTMLResponse)
 def home():
     return """
-    <h1>Eccomi Display TV</h1>
-    <p><a href="/maximo">Maximo</a></p>
-    <p><a href="/civitavecchia">Civitavecchia</a></p>
-    <p><a href="/grosseto">Grosseto</a></p>
-    <p><a href="/laquila">L'Aquila</a></p>
-    """
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Eccomi Display TV</title>
+</head>
+<body>
+  <h1>Eccomi Display TV attivo</h1>
+  <ul>
+    <li><a href="/maximo">Maximo TV Orizzontale</a></li>
+    <li><a href="/civitavecchia">Civitavecchia TV Verticale</a></li>
+    <li><a href="/grosseto">Grosseto TV Orizzontale</a></li>
+    <li><a href="/laquila">L'Aquila TV Orizzontale</a></li>
+  </ul>
+</body>
+</html>
+"""
 
-@app.get("/{screen}", response_class=HTMLResponse)
-def display(screen: str):
-    video = SCREENS.get(screen)
-    if not video:
-        return "<h1>Schermo non trovato</h1>"
-    return page(video)
 
 @app.get("/health")
 def health():
-    return {"ok": True}
+    return {"ok": True, "service": "eccomi-display-tv"}
+
+
+@app.get("/{screen_name}", response_class=HTMLResponse)
+def display(screen_name: str):
+    screen = SCREENS.get(screen_name)
+
+    if not screen:
+        return "<h1>Schermo non trovato</h1>"
+
+    return render_page(screen["title"], screen["video"])
