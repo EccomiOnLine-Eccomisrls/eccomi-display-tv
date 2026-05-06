@@ -3,97 +3,66 @@ from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="Eccomi Display TV")
 
-ORIZZONTALE = "https://1drv.ms/v/c/ed36ce1208493750/IQD3uR3DU9Y9QJsyJ9BDjyQwAe0VDOQjjXGrJyfGPPm7Mak?e=ruE47B"
-VERTICALE = "https://drive.google.com/uc?export=download&id=1rEeVmQ1-q4TXTVVP-6opjmAA4nFquqcV"
+# VIDEO
+ORIZZONTALE = "VERTICALE = "https://drive.google.com/uc?export=download&id=1rEeVmQ1-q4TXTVVP-6opjmAA4nFquqcV"
+
+VERTICALE = "https://drive.google.com/uc?export=download&id=1CSSua0TF2AL-hWpC07fjNTxUzZMN9rKR"
 
 SCREENS = {
     "maximo": {
-        "title": "Maximo TV Orizzontale",
+        "title": "Maximo TV",
         "video": ORIZZONTALE,
     },
     "civitavecchia": {
-        "title": "Civitavecchia TV Verticale",
+        "title": "Civitavecchia TV",
         "video": VERTICALE,
     },
     "grosseto": {
-        "title": "Grosseto TV Orizzontale",
+        "title": "Grosseto TV",
         "video": ORIZZONTALE,
     },
     "laquila": {
-        "title": "L'Aquila TV Orizzontale",
+        "title": "L'Aquila TV",
         "video": ORIZZONTALE,
     },
 }
 
 
-def render_page(title: str, video_url: str):
+def render_page(title, video_url):
     return f"""
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="3600">
-  <title>{title}</title>
-
-  <style>
-    html, body {{
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      overflow: hidden;
-    }}
-
-    iframe {{
-      width: 100vw;
-      height: 100vh;
-      border: 0;
-      background: #000;
-    }}
-  </style>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="600">
+<title>{title}</title>
+<style>
+html, body {{
+  margin: 0;
+  background: black;
+  overflow: hidden;
+}}
+video {{
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}}
+</style>
 </head>
-
 <body>
-  <iframe src="{video_url}" allow="autoplay; fullscreen"></iframe>
+
+<video autoplay muted loop playsinline>
+  <source src="{video_url}" type="video/mp4">
+</video>
+
 </body>
 </html>
 """
 
 
-@app.get("/", response_class=HTMLResponse)
-def home():
-    return """
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8">
-  <title>Eccomi Display TV</title>
-</head>
-<body>
-  <h1>Eccomi Display TV attivo</h1>
-  <ul>
-    <li><a href="/maximo">Maximo TV Orizzontale</a></li>
-    <li><a href="/civitavecchia">Civitavecchia TV Verticale</a></li>
-    <li><a href="/grosseto">Grosseto TV Orizzontale</a></li>
-    <li><a href="/laquila">L'Aquila TV Orizzontale</a></li>
-  </ul>
-</body>
-</html>
-"""
-
-
-@app.get("/health")
-def health():
-    return {"ok": True, "service": "eccomi-display-tv"}
-
-
-@app.get("/{screen_name}", response_class=HTMLResponse)
-def display(screen_name: str):
-    screen = SCREENS.get(screen_name)
-
-    if not screen:
+@app.get("/{screen}", response_class=HTMLResponse)
+def screen(screen: str):
+    data = SCREENS.get(screen)
+    if not data:
         return "<h1>Schermo non trovato</h1>"
-
-    return render_page(screen["title"], screen["video"])
+    return render_page(data["title"], data["video"])
