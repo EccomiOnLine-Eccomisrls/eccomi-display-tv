@@ -3,8 +3,9 @@ from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="Eccomi Display TV")
 
-ORIZZONTALE = "https://drive.google.com/uc?export=download&id=1CSSua0TF2AL-hWpC07fjNTxUzZMN9rKR"
-VERTICALE = "https://drive.google.com/uc?export=download&id=1rEeVmQ1-q4TXTVVP-6opjmAA4nFquqcV"
+ORIZZONTALE = "https://www.dropbox.com/scl/fi/n2lbb2ky42dist5ojqhbl/orizzontale.MP4?rlkey=ft0dtz52235og6vonwrh3k1i7&st=o0qln1cq&raw=1"
+
+VERTICALE = "https://www.dropbox.com/scl/fi/rdsv86zlt740xebafj8w7/verticale.MP4?rlkey=e2lo5jqiksvrp2t24oye8sezn&st=guipalz1&raw=1"
 
 SCREENS = {
     "maximo": {"title": "Maximo TV", "video": ORIZZONTALE},
@@ -26,16 +27,19 @@ html, body {{
   margin: 0;
   background: black;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
 }}
 video {{
   width: 100vw;
   height: 100vh;
   object-fit: cover;
+  background: black;
 }}
 </style>
 </head>
 <body>
-<video autoplay muted loop playsinline>
+<video autoplay muted loop playsinline preload="auto">
   <source src="{video_url}" type="video/mp4">
 </video>
 </body>
