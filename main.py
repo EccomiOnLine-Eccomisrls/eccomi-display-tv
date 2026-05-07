@@ -3,15 +3,19 @@ from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="Eccomi Display TV")
 
+# I tuoi link Dropbox (da aggiornare ogni 10gg)
 ORIZZONTALE = "https://www.dropbox.com/scl/fi/n2lbb2ky42dist5ojqhbl/orizzontale.MP4?rlkey=ft0dtz52235og6vonwrh3k1i7&st=o0qln1cq&raw=1"
 
 VERTICALE = "https://www.dropbox.com/scl/fi/rdsv86zlt740xebafj8w7/verticale.MP4?rlkey=e2lo5jqiksvrp2t24oye8sezn&st=guipalz1&raw=1"
 
+# --- AGGIUNGI O RIMUOVI LE TV QUI ---
 SCREENS = {
     "maximo": {"title": "Maximo TV", "video": ORIZZONTALE},
     "civitavecchia": {"title": "Civitavecchia TV", "video": VERTICALE},
     "grosseto": {"title": "Grosseto TV", "video": ORIZZONTALE},
     "laquila": {"title": "L'Aquila TV", "video": ORIZZONTALE},
+    "roma": {"title": "Roma TV", "video": ORIZZONTALE},      # Esempio nuova TV
+    "milano": {"title": "Milano TV", "video": VERTICALE},     # Esempio nuova TV
 }
 
 def render_page(title, video_url):
@@ -20,7 +24,7 @@ def render_page(title, video_url):
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="600">
+<meta http-equiv="refresh" content="86400">
 <title>{title}</title>
 <style>
 html, body {{
@@ -48,15 +52,15 @@ video {{
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-    return """
-<h1>Eccomi Display TV attivo</h1>
-<ul>
-<li><a href="/maximo">Maximo</a></li>
-<li><a href="/civitavecchia">Civitavecchia</a></li>
-<li><a href="/grosseto">Grosseto</a></li>
-<li><a href="/laquila">L'Aquila</a></li>
-</ul>
-"""
+    # Questa riga genera la lista HTML automaticamente leggendo da SCREENS
+    lista_link = "".join([f'<li><a href="/{chiave}">{dati["title"]}</a></li>' for chiave, dati in SCREENS.items()])
+    
+    return f"""
+    <h1>Eccomi Display TV attivo</h1>
+    <ul>
+        {lista_link}
+    </ul>
+    """
 
 @app.get("/health")
 def health():
