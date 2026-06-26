@@ -3,72 +3,90 @@ from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="Eccomi Display TV")
 
-# I tuoi link Dropbox (da aggiornare ogni 10gg)
+# Link Dropbox RAW
 ORIZZONTALE = "https://www.dropbox.com/scl/fi/gq60jqtiipajix443qy0n/VIDEO-2026-06-26-10-29-48.mp4?rlkey=co7xacci231c09u7v8nkev9n0&st=jvkwq0d6&raw=1"
 
 VERTICALE = "https://www.dropbox.com/scl/fi/gq60jqtiipajix443qy0n/VIDEO-2026-06-26-10-29-48.mp4?rlkey=co7xacci231c09u7v8nkev9n0&st=jvkwq0d6&raw=1"
 
-# --- AGGIUNGI O RIMUOVI LE TV QUI ---
-SCREENS = {
-    "maximo": {"title": "Maximo TV", "video": ORIZZONTALE},
-    "civitavecchia": {"title": "Civitavecchia TV", "video": VERTICALE},
-    "grosseto": {"title": "Grosseto TV", "video": ORIZZONTALE},
-    "laquila": {"title": "L'Aquila TV", "video": ORIZZONTALE},
-    "roma": {"title": "Roma TV", "video": ORIZZONTALE},      # Esempio nuova TV
-    "milano": {"title": "Milano TV", "video": VERTICALE},     # Esempio nuova TV
-}
 
-def render_page(title, video_url):
+def render_auto_page():
     return f"""
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="86400">
-<title>{title}</title>
+<title>Eccomi Display TV</title>
+
 <style>
 html, body {{
   margin: 0;
-  background: black;
+  padding: 0;
+  background: #000;
   overflow: hidden;
   width: 100%;
   height: 100%;
 }}
+
 video {{
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-  background: black;
+  background: #000;
 }}
 </style>
 </head>
+
 <body>
-<video autoplay muted loop playsinline preload="auto">
-  <source src="{video_url}" type="video/mp4">
-</video>
+<video id="player" autoplay muted loop playsinline preload="auto"></video>
+
+<script>
+const ORIZZONTALE = "{ORIZZONTALE}";
+const VERTICALE = "{VERTICALE}";
+const player = document.getElementById("player");
+
+function scegliVideo() {{
+  const isVerticale = window.innerHeight > window.innerWidth;
+  const videoScelto = isVerticale ? VERTICALE : ORIZZONTALE;
+
+  if (player.src !== videoScelto) {{
+    player.src = videoScelto;
+    player.load();
+    player.play().catch(() => {{}});
+  }}
+}}
+
+scegliVideo();
+
+window.addEventListener("resize", scegliVideo);
+window.addEventListener("orientationchange", scegliVideo);
+</script>
 </body>
 </html>
 """
 
+
 @app.get("/", response_class=HTMLResponse)
 def home():
-    # Questa riga genera la lista HTML automaticamente leggendo da SCREENS
-    lista_link = "".join([f'<li><a href="/{chiave}">{dati["title"]}</a></li>' for chiave, dati in SCREENS.items()])
-    
-    return f"""
-    <h1>Eccomi Display TV attivo</h1>
-    <ul>
-        {lista_link}
-    </ul>
-    """
+    return """
+<h1>Eccomi Display TV attivo</h1>
+<p><a href="/oe">Apri Display Unico /oe</a></p>
+<p><a href="/health">Health Check</a></p>
+"""
+
+
+@app.get("/oe", response_class=HTMLResponse)
+def oe():
+    return render_auto_page()
+
 
 @app.get("/health")
 def health():
-    return {"ok": True}
+    return {"ok": True, "service": "eccomi-display-tv"}
 
+
+# Compatibilità con i vecchi link già usati sui TV
 @app.get("/{screen}", response_class=HTMLResponse)
 def screen(screen: str):
-    data = SCREENS.get(screen)
-    if not data:
-        return "<h1>Schermo non trovato</h1>"
-    return render_page(data["title"], data["video"])
+    return render_auto_page()
