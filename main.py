@@ -4,9 +4,9 @@ from fastapi.responses import HTMLResponse
 app = FastAPI(title="Eccomi Display TV")
 
 # I tuoi link Dropbox (da aggiornare ogni 10gg)
-ORIZZONTALE = "https://www.dropbox.com/scl/fi/n2lbb2ky42dist5ojqhbl/orizzontale.MP4?rlkey=ft0dtz52235og6vonwrh3k1i7&st=o0qln1cq&raw=1"
+ORIZZONTALE = "https://www.dropbox.com/scl/fi/gq60jqtiipajix443qy0n/VIDEO-2026-06-26-10-29-48.mp4?rlkey=co7xacci231c09u7v8nkev9n0&st=jvkwq0d6&raw=1"
 
-VERTICALE = "https://www.dropbox.com/scl/fi/rdsv86zlt740xebafj8w7/verticale.MP4?rlkey=e2lo5jqiksvrp2t24oye8sezn&st=guipalz1&raw=1"
+VERTICALE = "https://www.dropbox.com/scl/fi/gq60jqtiipajix443qy0n/VIDEO-2026-06-26-10-29-48.mp4?rlkey=co7xacci231c09u7v8nkev9n0&st=jvkwq0d6&raw=1"
 
 # --- AGGIUNGI O RIMUOVI LE TV QUI ---
 SCREENS = {
