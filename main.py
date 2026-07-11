@@ -4,9 +4,9 @@ from fastapi.responses import HTMLResponse
 app = FastAPI(title="Eccomi Display TV")
 
 # Link Dropbox RAW
-ORIZZONTALE = "https://www.dropbox.com/scl/fi/gq60jqtiipajix443qy0n/VIDEO-2026-06-26-10-29-48.mp4?rlkey=co7xacci231c09u7v8nkev9n0&st=jvkwq0d6&raw=1"
+ORIZZONTALE = "https://www.dropbox.com/scl/fi/o2zgr5mldx2zv2x34fosx/VIDEO-2026-07-10-15-34-11.mp4?rlkey=fnxo788iwql9a0177ajpd39n1&st=yyao12pz&raw=1"
 
-VERTICALE = "https://www.dropbox.com/scl/fi/gq60jqtiipajix443qy0n/VIDEO-2026-06-26-10-29-48.mp4?rlkey=co7xacci231c09u7v8nkev9n0&st=jvkwq0d6&raw=1"
+VERTICALE = "https://www.dropbox.com/scl/fi/o2zgr5mldx2zv2x34fosx/VIDEO-2026-07-10-15-34-11.mp4?rlkey=fnxo788iwql9a0177ajpd39n1&st=yyao12pz&raw=1"
 
 
 def render_auto_page():
